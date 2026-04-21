@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Học Tiếng Việt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #1A0808;
+  --surface:  #2A1010;
+  --surface2: #3A1818;
+  --border:   #5A2020;
+  --text:     #F5E6C8;
+  --muted:    #C4A882;
+  --accent:   #C0392B;
+  --gold:     #F39C12;
+  --jade:     #2E8B57;
+  --heat-0:   #2A1010;
+  --heat-1:   #7A2020;
+  --heat-2:   #A02828;
+  --heat-3:   #C0392B;
+  --heat-4:   #E05030;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+a { color: var(--gold); text-decoration: none; }
+
+header {
+  padding: 2rem 2rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+.header-text h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.header-text p { color: var(--muted); font-size: 0.9rem; margin-top: 0.15rem; }
+.lotus-svg { flex-shrink: 0; }
+
+main { max-width: 860px; margin: 0 auto; padding: 2rem; }
+
+.divider { margin: 2rem 0; opacity: 0.35; }
+
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+.stat-value { font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1.1; }
+.stat-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.3rem;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.no-practice { color: var(--muted); font-style: italic; padding: 0.5rem 0; }
+
+.session-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 0.8rem;
+}
+.session-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.badge {
+  display: inline-block;
+  padding: 0.18rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-quiz         { background: #1a3a5c; color: #6ab0f5; }
+.badge-exercise     { background: #1a3a2a; color: #6ad4a0; }
+.badge-conversation { background: #3a2a1a; color: #f5b86a; }
+.badge-lookup       { background: #2a1a3a; color: #c08af5; }
+.session-topic { color: var(--muted); font-size: 0.88rem; }
+.score { margin-left: auto; font-size: 1rem; font-weight: 600; color: var(--jade); }
+
+.vocab-section { margin-top: 0.8rem; }
+.vocab-item { margin-bottom: 0.9rem; }
+.vocab-tag {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+.vocab-english { color: var(--muted); font-size: 0.8rem; }
+.sample-vi { font-size: 0.88rem; color: var(--text); margin: 0.15rem 0 0 0.1rem; }
+.sample-en { font-size: 0.8rem; color: var(--muted); font-style: italic; margin: 0 0 0 0.1rem; }
+
+.heatmap-wrap { overflow-x: auto; padding-bottom: 0.5rem; }
+.heatmap-months { display: flex; margin-bottom: 4px; padding-left: 1px; }
+.hm-month { font-size: 0.7rem; color: var(--muted); width: 16px; text-align: left; flex-shrink: 0; }
+.heatmap-grid {
+  display: grid;
+  grid-template-rows: repeat(7, 13px);
+  grid-auto-flow: column;
+  grid-auto-columns: 13px;
+  gap: 3px;
+}
+.hm-cell { width: 13px; height: 13px; border-radius: 2px; background: var(--heat-0); }
+.hm-cell.level-1 { background: var(--heat-1); }
+.hm-cell.level-2 { background: var(--heat-2); }
+.hm-cell.level-3 { background: var(--heat-3); }
+.hm-cell.level-4 { background: var(--heat-4); }
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.legend-cell { width: 11px; height: 11px; border-radius: 2px; }
+
+.day-details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+  background: var(--surface);
+}
+.day-summary {
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+  user-select: none;
+}
+.day-summary::-webkit-details-marker { display: none; }
+.day-summary::before {
+  content: '›';
+  color: var(--gold);
+  font-size: 1rem;
+  transition: transform 0.15s;
+  display: inline-block;
+  width: 0.8rem;
+}
+details[open] .day-summary::before { transform: rotate(90deg); }
+.day-date { font-weight: 500; }
+.day-meta { font-size: 0.82rem; color: var(--muted); margin-left: auto; }
+.day-cards { padding: 0 0.8rem 0.8rem; }
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+@media (max-width: 600px) {
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  main { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+<header>
+<svg class="lotus-svg" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="26" cy="26" rx="4.5" ry="11" fill="#F39C12" opacity="0.85"/><ellipse cx="26" cy="26" rx="4.5" ry="11" fill="#F39C12" opacity="0.85" transform="rotate(45 26 26)"/><ellipse cx="26" cy="26" rx="4.5" ry="11" fill="#F39C12" opacity="0.85" transform="rotate(90 26 26)"/><ellipse cx="26" cy="26" rx="4.5" ry="11" fill="#F39C12" opacity="0.85" transform="rotate(135 26 26)"/><circle cx="26" cy="26" r="4.5" fill="#F39C12"/></svg>
+<div class="header-text"><h1>Học Tiếng Việt</h1><p>Vietnamese vocabulary progress · 21 April 2026</p></div>
+</header>
+<main>
+<div class="stats-strip">
+  <div class="stat-card"><div class="stat-value">27</div><div class="stat-label">Tổng từ vựng</div></div>
+  <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Buổi học tuần này</div></div>
+  <div class="stat-card"><div class="stat-value">1 ngày</div><div class="stat-label">Chuỗi liên tiếp</div></div>
+  <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Tổng buổi học</div></div>
+</div>
+<div class="divider"><svg viewBox="0 0 600 12" width="100%" xmlns="http://www.w3.org/2000/svg"><path d="M0,6 Q150,1 300,6 Q450,11 600,6" stroke="#F39C12" fill="none" stroke-width="1.5"/></svg></div>
+<section>
+<p class="section-title">Hôm nay</p>
+<p class="no-practice">Không luyện tập hôm nay.</p>
+</section>
+<div class="divider"><svg viewBox="0 0 600 12" width="100%" xmlns="http://www.w3.org/2000/svg"><path d="M0,6 Q150,1 300,6 Q450,11 600,6" stroke="#F39C12" fill="none" stroke-width="1.5"/></svg></div>
+<section>
+<p class="section-title">16 tuần gần đây</p>
+<div class="heatmap-wrap">
+<div class="heatmap-months"><span class="hm-month">Dec</span><span class="hm-month">Jan</span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month">Feb</span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month">Mar</span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month"></span><span class="hm-month">Apr</span><span class="hm-month"></span><span class="hm-month"></span></div>
+<div class="heatmap-grid">
+<div class="hm-cell level-0" title="2025-12-31: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-01: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-02: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-03: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-04: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-05: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-06: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-07: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-08: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-09: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-10: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-11: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-12: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-13: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-14: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-15: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-16: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-17: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-18: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-19: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-20: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-21: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-22: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-23: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-24: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-25: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-26: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-27: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-28: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-29: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-30: no practice"></div>
+<div class="hm-cell level-0" title="2026-01-31: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-01: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-02: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-03: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-04: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-05: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-06: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-07: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-08: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-09: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-10: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-11: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-12: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-13: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-14: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-15: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-16: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-17: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-18: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-19: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-20: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-21: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-22: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-23: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-24: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-25: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-26: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-27: no practice"></div>
+<div class="hm-cell level-0" title="2026-02-28: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-01: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-02: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-03: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-04: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-05: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-06: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-07: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-08: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-09: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-10: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-11: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-12: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-13: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-14: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-15: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-16: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-17: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-18: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-19: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-20: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-21: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-22: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-23: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-24: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-25: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-26: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-27: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-28: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-29: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-30: no practice"></div>
+<div class="hm-cell level-0" title="2026-03-31: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-01: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-02: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-03: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-04: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-05: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-06: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-07: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-08: no practice"></div>
+<div class="hm-cell level-1" title="2026-04-09: 3 words"></div>
+<div class="hm-cell level-0" title="2026-04-10: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-11: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-12: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-13: no practice"></div>
+<div class="hm-cell level-3" title="2026-04-14: 16 words"></div>
+<div class="hm-cell level-4" title="2026-04-15: 23 words"></div>
+<div class="hm-cell level-0" title="2026-04-16: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-17: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-18: no practice"></div>
+<div class="hm-cell level-0" title="2026-04-19: no practice"></div>
+<div class="hm-cell level-3" title="2026-04-20: 10 words"></div>
+<div class="hm-cell level-0" title="2026-04-21: no practice"></div>
+</div>
+</div>
+<div class="heatmap-legend"><span>Ít hơn</span><div class="legend-cell" style="background:var(--heat-0)"></div><div class="legend-cell" style="background:var(--heat-1)"></div><div class="legend-cell" style="background:var(--heat-2)"></div><div class="legend-cell" style="background:var(--heat-3)"></div><div class="legend-cell" style="background:var(--heat-4)"></div><span>Nhiều hơn</span></div>
+</section>
+<div class="divider"><svg viewBox="0 0 600 12" width="100%" xmlns="http://www.w3.org/2000/svg"><path d="M0,6 Q150,1 300,6 Q450,11 600,6" stroke="#F39C12" fill="none" stroke-width="1.5"/></svg></div>
+<section>
+<p class="section-title">Lịch sử luyện tập</p>
+<details class="day-details"><summary class="day-summary"><span class="day-date">2026-04-20</span><span class="day-meta">1 session · 10 words</span></summary><div class="day-cards"><div class="session-card"><div class="session-header"><span class="badge badge-quiz">Quiz</span><span class="session-topic">vocab quiz</span><span class="score">19/20</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">thân nhiệt</span> <span class="vocab-english">— body temperature</span><p class="sample-vi">Thân nhiệt bình thường của người là khoảng 37 độ C.</p><p class="sample-en">Normal human body temperature is around 37 degrees Celsius.</p></div>
+<div class="vocab-item"><span class="vocab-tag">hạn chế</span> <span class="vocab-english">— to limit, to restrict; limited</span><p class="sample-vi">Bạn nên hạn chế ăn đồ chiên rán.</p><p class="sample-en">You should limit eating fried food.</p></div>
+<div class="vocab-item"><span class="vocab-tag">tiếp xúc</span> <span class="vocab-english">— to be exposed to, to come into contact with</span><p class="sample-vi">Hạn chế tiếp xúc với ánh nắng mặt trời vào giữa trưa.</p><p class="sample-en">Limit exposure to sunlight at midday.</p></div>
+<div class="vocab-item"><span class="vocab-tag">cảnh tượng</span> <span class="vocab-english">— sight, spectacle, scene</span><p class="sample-vi">Cảnh tượng hàng nghìn con bướm bay thật kỳ diệu.</p><p class="sample-en">The spectacle of thousands of butterflies in flight was truly marvellous.</p></div>
+<div class="vocab-item"><span class="vocab-tag">bảo tồn</span> <span class="vocab-english">— to preserve, to conserve</span><p class="sample-vi">Chúng ta cần bảo tồn các loài động vật quý hiếm.</p><p class="sample-en">We need to conserve rare animal species.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chuyên gia</span> <span class="vocab-english">— expert, specialist</span><p class="sample-vi">Các chuyên gia sinh thái cảnh báo về tình trạng mất rừng.</p><p class="sample-en">Ecology experts warn about deforestation.</p></div>
+<div class="vocab-item"><span class="vocab-tag">kỷ luật</span> <span class="vocab-english">— discipline</span><p class="sample-vi">Muay Thai đòi hỏi kỷ luật cao.</p><p class="sample-en">Muay Thai requires a high level of discipline.</p></div>
+<div class="vocab-item"><span class="vocab-tag">kiên trì</span> <span class="vocab-english">— perseverance, persistence; persistent</span><p class="sample-vi">Bỏ thuốc lá đòi hỏi sự kiên trì.</p><p class="sample-en">Quitting smoking requires perseverance.</p></div>
+<div class="vocab-item"><span class="vocab-tag">duy trì</span> <span class="vocab-english">— to maintain, to sustain, to keep up</span><p class="sample-vi">Bạn cần duy trì thói quen tập thể dục mỗi ngày.</p><p class="sample-en">You need to maintain the habit of exercising every day.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chẳng hạn</span> <span class="vocab-english">— for example</span><p class="sample-vi">Tôi thích các môn thể thao, chẳng hạn như bơi lội và chạy bộ.</p><p class="sample-en">I like sports, for example swimming and running.</p></div>
+</div></div>
+</div></details>
+<details class="day-details"><summary class="day-summary"><span class="day-date">2026-04-15</span><span class="day-meta">2 sessions · 23 words</span></summary><div class="day-cards"><div class="session-card"><div class="session-header"><span class="badge badge-conversation">Conversation</span><span class="session-topic">Personal challenges — Muay Thai training in Thailand and starting a new job</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">bản thân</span> <span class="vocab-english">— oneself, yourself, themselves</span><p class="sample-vi">Anh nên tin tưởng vào bản thân mình.</p><p class="sample-en">You should trust in yourself.</p></div>
+<div class="vocab-item"><span class="vocab-tag">đòi hỏi</span> <span class="vocab-english">— to require, to demand</span><p class="sample-vi">Công việc này đòi hỏi sự kiên nhẫn.</p><p class="sample-en">This job requires patience.</p></div>
+<div class="vocab-item"><span class="vocab-tag">phục hồi</span> <span class="vocab-english">— to recover, to restore</span><p class="sample-vi">Cơ thể bắt đầu phục hồi sau khi bỏ thuốc.</p><p class="sample-en">The body starts to recover after quitting smoking.</p></div>
+</div></div>
+
+<div class="session-card"><div class="session-header"><span class="badge badge-quiz">Quiz</span><span class="session-topic">vocab quiz</span><span class="score">19/20</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">thân nhiệt</span> <span class="vocab-english">— body temperature</span><p class="sample-vi">Thân nhiệt bình thường của người là khoảng 37 độ C.</p><p class="sample-en">Normal human body temperature is around 37 degrees Celsius.</p></div>
+<div class="vocab-item"><span class="vocab-tag">hạn chế</span> <span class="vocab-english">— to limit, to restrict; limited</span><p class="sample-vi">Bạn nên hạn chế ăn đồ chiên rán.</p><p class="sample-en">You should limit eating fried food.</p></div>
+<div class="vocab-item"><span class="vocab-tag">tiếp xúc</span> <span class="vocab-english">— to be exposed to, to come into contact with</span><p class="sample-vi">Hạn chế tiếp xúc với ánh nắng mặt trời vào giữa trưa.</p><p class="sample-en">Limit exposure to sunlight at midday.</p></div>
+<div class="vocab-item"><span class="vocab-tag">cảnh tượng</span> <span class="vocab-english">— sight, spectacle, scene</span><p class="sample-vi">Cảnh tượng hàng nghìn con bướm bay thật kỳ diệu.</p><p class="sample-en">The spectacle of thousands of butterflies in flight was truly marvellous.</p></div>
+<div class="vocab-item"><span class="vocab-tag">bảo tồn</span> <span class="vocab-english">— to preserve, to conserve</span><p class="sample-vi">Chúng ta cần bảo tồn các loài động vật quý hiếm.</p><p class="sample-en">We need to conserve rare animal species.</p></div>
+<div class="vocab-item"><span class="vocab-tag">duy trì</span> <span class="vocab-english">— to maintain, to sustain, to keep up</span><p class="sample-vi">Bạn cần duy trì thói quen tập thể dục mỗi ngày.</p><p class="sample-en">You need to maintain the habit of exercising every day.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chuyên gia</span> <span class="vocab-english">— expert, specialist</span><p class="sample-vi">Các chuyên gia sinh thái cảnh báo về tình trạng mất rừng.</p><p class="sample-en">Ecology experts warn about deforestation.</p></div>
+<div class="vocab-item"><span class="vocab-tag">kỷ luật</span> <span class="vocab-english">— discipline</span><p class="sample-vi">Muay Thai đòi hỏi kỷ luật cao.</p><p class="sample-en">Muay Thai requires a high level of discipline.</p></div>
+<div class="vocab-item"><span class="vocab-tag">kiên trì</span> <span class="vocab-english">— perseverance, persistence; persistent</span><p class="sample-vi">Bỏ thuốc lá đòi hỏi sự kiên trì.</p><p class="sample-en">Quitting smoking requires perseverance.</p></div>
+<div class="vocab-item"><span class="vocab-tag">từ bỏ</span></div>
+<div class="vocab-item"><span class="vocab-tag">động vật hoang dã</span></div>
+<div class="vocab-item"><span class="vocab-tag">điều hòa</span> <span class="vocab-english">— to regulate, to balance</span><p class="sample-vi">Cơ thể tự điều hòa nhiệt độ bên trong.</p><p class="sample-en">The body regulates its internal temperature.</p></div>
+<div class="vocab-item"><span class="vocab-tag">rối loạn</span> <span class="vocab-english">— disruption, disorder; disrupted, disordered</span><p class="sample-vi">Nắng nóng làm rối loạn quá trình điều hòa thân nhiệt.</p><p class="sample-en">Hot weather disrupts the body&#x27;s temperature regulation process.</p></div>
+<div class="vocab-item"><span class="vocab-tag">môi trường tự nhiên</span></div>
+<div class="vocab-item"><span class="vocab-tag">mở rộng</span> <span class="vocab-english">— to expand, to widen, to extend</span><p class="sample-vi">Ban quản lý mở rộng các tuyến tham quan trong vườn quốc gia.</p><p class="sample-en">The management board expanded the visiting trails in the national park.</p></div>
+<div class="vocab-item"><span class="vocab-tag">mực nước biển</span></div>
+<div class="vocab-item"><span class="vocab-tag">chứng kiến</span> <span class="vocab-english">— to witness, to see firsthand</span><p class="sample-vi">Tôi được chứng kiến cảnh tượng tuyệt đẹp tại Cúc Phương.</p><p class="sample-en">I got to witness a stunning spectacle at Cúc Phương.</p></div>
+<div class="vocab-item"><span class="vocab-tag">hạ nhiệt</span> <span class="vocab-english">— to cool down, to lower temperature</span><p class="sample-vi">Ăn dưa hấu giúp hạ nhiệt cơ thể hiệu quả.</p><p class="sample-en">Eating watermelon helps cool down the body effectively.</p></div>
+<div class="vocab-item"><span class="vocab-tag">mức cân bằng</span> <span class="vocab-english">— equilibrium, balanced level</span><p class="sample-vi">Huyết áp dần trở lại mức cân bằng sau khi bỏ thuốc.</p><p class="sample-en">Blood pressure gradually returns to equilibrium after quitting smoking.</p></div>
+<div class="vocab-item"><span class="vocab-tag">quá trình</span> <span class="vocab-english">— process, course (of something)</span><p class="sample-vi">Quá trình tiêu hóa mất vài giờ.</p><p class="sample-en">The digestion process takes a few hours.</p></div>
+</div></div>
+</div></details>
+<details class="day-details"><summary class="day-summary"><span class="day-date">2026-04-14</span><span class="day-meta">3 sessions · 16 words</span></summary><div class="day-cards"><div class="session-card"><div class="session-header"><span class="badge badge-conversation">Conversation</span><span class="session-topic">No-menu restaurant in Hanoi</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">vững vàng</span> <span class="vocab-english">— steady, firm, stable</span><p class="sample-vi">Cô ấy bước đi vững vàng trên con đường mới.</p><p class="sample-en">She walks steadily on the new path.</p></div>
+<div class="vocab-item"><span class="vocab-tag">cáu kỉnh</span> <span class="vocab-english">— irritable, grumpy</span><p class="sample-vi">Anh ấy rất cáu kỉnh khi không ngủ đủ giấc.</p><p class="sample-en">He is very irritable when he doesn&#x27;t get enough sleep.</p></div>
+<div class="vocab-item"><span class="vocab-tag">tâm lý</span> <span class="vocab-english">— mindset, psychology, mental state</span><p class="sample-vi">Người cai thuốc lá nên giữ tâm lý vững vàng.</p><p class="sample-en">People quitting smoking should maintain a steady mindset.</p></div>
+</div></div>
+
+<div class="session-card"><div class="session-header"><span class="badge badge-conversation">Conversation</span><span class="session-topic">processed food, healthy eating, exercise and recovery</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">tác động</span> <span class="vocab-english">— impact, effect; to affect</span><p class="sample-vi">Nicotine có tác động mạnh lên hệ thần kinh.</p><p class="sample-en">Nicotine has a strong effect on the nervous system.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chất phụ gia</span> <span class="vocab-english">— additive, food additive</span><p class="sample-vi">Thuốc lá chứa nhiều chất phụ gia độc hại.</p><p class="sample-en">Cigarettes contain many harmful additives.</p></div>
+<div class="vocab-item"><span class="vocab-tag">nhịp tim</span> <span class="vocab-english">— heart rate, pulse</span><p class="sample-vi">Nhịp tim của anh ấy trở lại bình thường sau khi nghỉ ngơi.</p><p class="sample-en">His heart rate returned to normal after resting.</p></div>
+</div></div>
+
+<div class="session-card"><div class="session-header"><span class="badge badge-quiz">Quiz</span><span class="session-topic">vocab quiz</span><span class="score">10/10</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">mức cân bằng</span> <span class="vocab-english">— equilibrium, balanced level</span><p class="sample-vi">Huyết áp dần trở lại mức cân bằng sau khi bỏ thuốc.</p><p class="sample-en">Blood pressure gradually returns to equilibrium after quitting smoking.</p></div>
+<div class="vocab-item"><span class="vocab-tag">hạ nhiệt</span> <span class="vocab-english">— to cool down, to lower temperature</span><p class="sample-vi">Ăn dưa hấu giúp hạ nhiệt cơ thể hiệu quả.</p><p class="sample-en">Eating watermelon helps cool down the body effectively.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chứng kiến</span> <span class="vocab-english">— to witness, to see firsthand</span><p class="sample-vi">Tôi được chứng kiến cảnh tượng tuyệt đẹp tại Cúc Phương.</p><p class="sample-en">I got to witness a stunning spectacle at Cúc Phương.</p></div>
+<div class="vocab-item"><span class="vocab-tag">quá trình</span> <span class="vocab-english">— process, course (of something)</span><p class="sample-vi">Quá trình tiêu hóa mất vài giờ.</p><p class="sample-en">The digestion process takes a few hours.</p></div>
+<div class="vocab-item"><span class="vocab-tag">bảo tồn</span> <span class="vocab-english">— to preserve, to conserve</span><p class="sample-vi">Chúng ta cần bảo tồn các loài động vật quý hiếm.</p><p class="sample-en">We need to conserve rare animal species.</p></div>
+<div class="vocab-item"><span class="vocab-tag">động vật hoang dã</span></div>
+<div class="vocab-item"><span class="vocab-tag">điều hòa</span> <span class="vocab-english">— to regulate, to balance</span><p class="sample-vi">Cơ thể tự điều hòa nhiệt độ bên trong.</p><p class="sample-en">The body regulates its internal temperature.</p></div>
+<div class="vocab-item"><span class="vocab-tag">rối loạn</span> <span class="vocab-english">— disruption, disorder; disrupted, disordered</span><p class="sample-vi">Nắng nóng làm rối loạn quá trình điều hòa thân nhiệt.</p><p class="sample-en">Hot weather disrupts the body&#x27;s temperature regulation process.</p></div>
+<div class="vocab-item"><span class="vocab-tag">môi trường tự nhiên</span></div>
+<div class="vocab-item"><span class="vocab-tag">mở rộng</span> <span class="vocab-english">— to expand, to widen, to extend</span><p class="sample-vi">Ban quản lý mở rộng các tuyến tham quan trong vườn quốc gia.</p><p class="sample-en">The management board expanded the visiting trails in the national park.</p></div>
+</div></div>
+</div></details>
+<details class="day-details"><summary class="day-summary"><span class="day-date">2026-04-09</span><span class="day-meta">1 session · 3 words</span></summary><div class="day-cards"><div class="session-card"><div class="session-header"><span class="badge badge-conversation">Conversation</span><span class="session-topic">processed food, healthy eating, and exercise recovery</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">tác động</span> <span class="vocab-english">— impact, effect; to affect</span><p class="sample-vi">Nicotine có tác động mạnh lên hệ thần kinh.</p><p class="sample-en">Nicotine has a strong effect on the nervous system.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chất phụ gia</span> <span class="vocab-english">— additive, food additive</span><p class="sample-vi">Thuốc lá chứa nhiều chất phụ gia độc hại.</p><p class="sample-en">Cigarettes contain many harmful additives.</p></div>
+<div class="vocab-item"><span class="vocab-tag">nhịp tim</span> <span class="vocab-english">— heart rate, pulse</span><p class="sample-vi">Nhịp tim của anh ấy trở lại bình thường sau khi nghỉ ngơi.</p><p class="sample-en">His heart rate returned to normal after resting.</p></div>
+</div></div>
+</div></details>
+<details class="day-details"><summary class="day-summary"><span class="day-date">2025-07-10</span><span class="day-meta">1 session · 10 words</span></summary><div class="day-cards"><div class="session-card"><div class="session-header"><span class="badge badge-quiz">Quiz</span><span class="session-topic">vocab quiz</span><span class="score">10/10</span></div><div class="vocab-section"><div class="vocab-item"><span class="vocab-tag">trạng thái</span> <span class="vocab-english">— state, condition, status</span><p class="sample-vi">Anh ấy luôn giữ trạng thái bình tĩnh trong mọi tình huống.</p><p class="sample-en">He always maintains a calm state in every situation.</p></div>
+<div class="vocab-item"><span class="vocab-tag">tiếp xúc</span> <span class="vocab-english">— to be exposed to, to come into contact with</span><p class="sample-vi">Hạn chế tiếp xúc với ánh nắng mặt trời vào giữa trưa.</p><p class="sample-en">Limit exposure to sunlight at midday.</p></div>
+<div class="vocab-item"><span class="vocab-tag">từ bỏ</span></div>
+<div class="vocab-item"><span class="vocab-tag">kiên trì</span> <span class="vocab-english">— perseverance, persistence; persistent</span><p class="sample-vi">Bỏ thuốc lá đòi hỏi sự kiên trì.</p><p class="sample-en">Quitting smoking requires perseverance.</p></div>
+<div class="vocab-item"><span class="vocab-tag">kỷ luật</span> <span class="vocab-english">— discipline</span><p class="sample-vi">Muay Thai đòi hỏi kỷ luật cao.</p><p class="sample-en">Muay Thai requires a high level of discipline.</p></div>
+<div class="vocab-item"><span class="vocab-tag">chuyên gia</span> <span class="vocab-english">— expert, specialist</span><p class="sample-vi">Các chuyên gia sinh thái cảnh báo về tình trạng mất rừng.</p><p class="sample-en">Ecology experts warn about deforestation.</p></div>
+<div class="vocab-item"><span class="vocab-tag">bảo tồn</span> <span class="vocab-english">— to preserve, to conserve</span><p class="sample-vi">Chúng ta cần bảo tồn các loài động vật quý hiếm.</p><p class="sample-en">We need to conserve rare animal species.</p></div>
+<div class="vocab-item"><span class="vocab-tag">duy trì</span> <span class="vocab-english">— to maintain, to sustain, to keep up</span><p class="sample-vi">Bạn cần duy trì thói quen tập thể dục mỗi ngày.</p><p class="sample-en">You need to maintain the habit of exercising every day.</p></div>
+<div class="vocab-item"><span class="vocab-tag">thân nhiệt</span> <span class="vocab-english">— body temperature</span><p class="sample-vi">Thân nhiệt bình thường của người là khoảng 37 độ C.</p><p class="sample-en">Normal human body temperature is around 37 degrees Celsius.</p></div>
+<div class="vocab-item"><span class="vocab-tag">cảnh tượng</span> <span class="vocab-english">— sight, spectacle, scene</span><p class="sample-vi">Cảnh tượng hàng nghìn con bướm bay thật kỳ diệu.</p><p class="sample-en">The spectacle of thousands of butterflies in flight was truly marvellous.</p></div>
+</div></div>
+</div></details>
+</section>
+</main>
+<footer>
+Cập nhật lần cuối: 2026-04-21 · <a href="https://stevens-j-54.github.io">← Trang chủ</a>
+</footer>
+</body>
+</html>
